@@ -44,9 +44,26 @@ body {
 	height: 100%;
 }
 
+.row-container {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+}
+
 h1 {
 	font-size: 70px;
 	margin-bottom: 10px;
+}
+
+.details {
+	font-size: 30px;
+	color: #d5d4d8;
+}
+
+.checkbox {
+	scale: 2;
 }
 
 .white-text {
