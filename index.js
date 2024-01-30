@@ -96,6 +96,9 @@ const symbols = [
 let characters = [];
 let cleanCharacters = [','];
 
+let numbersValue = document.getElementById('numbers-selector');
+let symbolsValue = document.getElementById('symbols-selector');
+
 //characters.push(capital);
 characters += capital + lower + numbers + symbols;
 
@@ -107,25 +110,8 @@ for (let i = 0; i < characters.length; i++) {
 
 console.log(filterCharacters('numbers'));
 
-function filterCharacters(number, symbol) {
-	// if (arg === 'numbers') {
-	// 	return cleanCharacters.filter((char) => {
-	// 		if (numbers.includes(char)) {
-	// 			return false;
-	// 		} else {
-	// 			return true;
-	// 		}
-	// 	});
-	// } else if (arg === 'symbols') {
-	// 	return cleanCharacters.filter((char) => {
-	// 		if (symbols.includes(char)) {
-	// 			return false;
-	// 		} else {
-	// 			return true;
-	// 		}
-	// 	});
-	// }
-	if (numbers && symbols) {
+function filterCharacters(numberBool, symbolBool) {
+	if (!numberBool && !symbolBool) {
 		return cleanCharacters.filter((char) => {
 			if (numbers.includes(char) || symbols.includes(char)) {
 				return false;
@@ -133,7 +119,7 @@ function filterCharacters(number, symbol) {
 				return true;
 			}
 		});
-	} else if (numbers) {
+	} else if (!numberBool) {
 		return cleanCharacters.filter((char) => {
 			if (numbers.includes(char)) {
 				return false;
@@ -141,7 +127,7 @@ function filterCharacters(number, symbol) {
 				return true;
 			}
 		});
-	} else if (symbols) {
+	} else if (!symbolBool) {
 		return cleanCharacters.filter((char) => {
 			if (symbols.includes(char)) {
 				return false;
@@ -149,14 +135,13 @@ function filterCharacters(number, symbol) {
 				return true;
 			}
 		});
+	} else {
+		return cleanCharacters;
 	}
 }
 
 passwordOneEl = document.getElementById('password-one');
 passwordTwoEl = document.getElementById('password-two');
-
-numbersValue = document.getElementById('numbers-selector').checked;
-symbolsValue = document.getElementById('symbols-selector').checked;
 
 const lengthInput = document.getElementById('password-length');
 
@@ -166,9 +151,12 @@ function generatePassword(length) {
 	let password = '';
 	for (let i = 0; i < length; i++) {
 		let randomIndex = Math.floor(
-			Math.random() * filterCharacters(numbersValue, symbolsValue).length
+			Math.random() *
+				filterCharacters(numbersValue.checked, symbolsValue.checked).length
 		);
-		password += filterCharacters(numbersValue, symbolsValue)[randomIndex];
+		password += filterCharacters(numbersValue.checked, symbolsValue.checked)[
+			randomIndex
+		];
 	}
 	return password;
 }
