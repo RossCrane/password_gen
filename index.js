@@ -1,4 +1,4 @@
-const capital = [
+const uppercase = [
 	'A',
 	'B',
 	'C',
@@ -27,7 +27,7 @@ const capital = [
 	'Z',
 ];
 
-const lower = [
+const lowercase = [
 	'a',
 	'b',
 	'c',
@@ -90,91 +90,84 @@ const symbols = [
 	'/',
 ];
 
-// remove spread operator
+// DOM elements
+const lowercaseSelector = document.getElementById('lowercases-selector');
+const uppercaseSelector = document.getElementById('capitals-selector');
+const numbersSelector = document.getElementById('numbers-selector');
+const symbolsSelector = document.getElementById('symbols-selector');
 
-// const characters = [...capital, ...lower, ...numbers, ...symbols];
-let characters = [];
-let cleanCharacters = [','];
-
-let numbersValue = document.getElementById('numbers-selector');
-let symbolsValue = document.getElementById('symbols-selector');
-
-//characters.push(capital);
-characters += capital + lower + numbers + symbols;
-
-for (let i = 0; i < characters.length; i++) {
-	if (characters[i] !== ',') {
-		cleanCharacters.push(characters[i]);
-	}
-}
-
-console.log(filterCharacters('numbers'));
-
-function filterCharacters(numberBool, symbolBool) {
-	if (!numberBool && !symbolBool) {
-		return cleanCharacters.filter((char) => {
-			if (numbers.includes(char) || symbols.includes(char)) {
-				return false;
-			} else {
-				return true;
-			}
-		});
-	} else if (!numberBool) {
-		return cleanCharacters.filter((char) => {
-			if (numbers.includes(char)) {
-				return false;
-			} else {
-				return true;
-			}
-		});
-	} else if (!symbolBool) {
-		return cleanCharacters.filter((char) => {
-			if (symbols.includes(char)) {
-				return false;
-			} else {
-				return true;
-			}
-		});
-	} else {
-		return cleanCharacters;
-	}
-}
-
-passwordOneEl = document.getElementById('password-one');
-passwordTwoEl = document.getElementById('password-two');
-
+const passwordOneEl = document.getElementById('password-one');
+const passwordTwoEl = document.getElementById('password-two');
 const lengthInput = document.getElementById('password-length');
 
-passwordLength = 0;
+// adds charecter sets to a target array
+function appendCharactersFromSelection(sourceArray, isSelected, targetArray) {
+	if (isSelected) {
+		for (let i = 0; i < sourceArray.length; i++) {
+			targetArray.push(sourceArray[i]);
+		}
+	}
+}
 
+// returns an array of characters to use
+function getCharacters() {
+	let characters = [];
+
+	// builds the array of character sets to use to make the password
+	appendCharactersFromSelection(
+		lowercase,
+		lowercaseSelector.checked,
+		characters
+	);
+	appendCharactersFromSelection(
+		uppercase,
+		uppercaseSelector.checked,
+		characters
+	);
+	appendCharactersFromSelection(numbers, numbersSelector.checked, characters);
+	appendCharactersFromSelection(symbols, symbolsSelector.checked, characters);
+
+	// case if nothing is selected
+	if (characters.length === 0) {
+		return null;
+	}
+	return characters;
+}
+
+// generates a password of a given length (specified by the user)
 function generatePassword(length) {
 	let password = '';
-	for (let i = 0; i < length; i++) {
-		let randomIndex = Math.floor(
-			Math.random() *
-				filterCharacters(numbersValue.checked, symbolsValue.checked).length
-		);
-		password += filterCharacters(numbersValue.checked, symbolsValue.checked)[
-			randomIndex
-		];
+	const charsToUse = getCharacters();
+	if (charsToUse === null) {
+		// tells the user to select some options if nothing is selected
+		return 'Please select options above.';
+	} else {
+		// generate password using selected characters
+		for (let i = 0; i < length; i++) {
+			const randomIndex = Math.floor(Math.random() * charsToUse.length);
+			password += charsToUse[randomIndex];
+		}
 	}
 	return password;
 }
 
-function copyTextToClipboard(el) {
-	const text = document.getElementById(el).innerText;
-	navigator.clipboard.writeText(text);
+function generatePasswords() {
+	const password1 = generatePassword(lengthInput.value);
+	const password2 = generatePassword(lengthInput.value);
+
+	// display passwords
+	passwordOneEl.textContent = password1;
+	passwordTwoEl.textContent = password2;
 }
 
-passwordOneEl.addEventListener('click', () => {
-	navigator.clipboard.writeText(passwordOneEl.textContent);
-});
-
-passwordTwoEl.addEventListener('click', () => {
-	navigator.clipboard.writeText(passwordTwoEl.textContent);
-});
-
-function generatePasswords() {
-	passwordOneEl.textContent = generatePassword(lengthInput.value);
-	passwordTwoEl.textContent = generatePassword(lengthInput.value);
+function copyTextToClipboard(textElementId) {
+	const text = document.getElementById(textElementId).textContent;
+	navigator.clipboard.writeText(text);
+	// turn the tooltip on
+	const tooltip = document.getElementById('copy-tooltip');
+	tooltip.style.display = 'block';
+	setTimeout(() => {
+		tooltip.style.display = 'none'; // makes the tooltip disappear after two seconds
+		// specified in milliseconds so its two seconds
+	}, 2000);
 }

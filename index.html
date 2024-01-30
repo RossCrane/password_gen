@@ -7,6 +7,8 @@
 			href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&display=swap"
 			rel="stylesheet"
 		/>
+		<title>Password Genrator</title>
+		<link rel="icon" type="image/svg+xml" href="assets/cat.svg" />
 	</head>
 
 	<body>
@@ -26,11 +28,29 @@
 						type="number"
 						id="password-length"
 						value="15"
-						min="8"
+						min="5"
 						max="128"
 					/>
 					<div class="row-container">
-						<p class="details">Include numbers:</p>
+						<p class="details">Include lowercase letters?</p>
+						<input
+							class="checkbox"
+							type="checkbox"
+							id="lowercases-selector"
+							checked
+						/>
+					</div>
+					<div class="row-container">
+						<p class="details">Include capital letters?</p>
+						<input
+							class="checkbox"
+							type="checkbox"
+							id="capitals-selector"
+							checked
+						/>
+					</div>
+					<div class="row-container">
+						<p class="details">Include numbers?</p>
 						<input
 							class="checkbox"
 							type="checkbox"
@@ -39,7 +59,7 @@
 						/>
 					</div>
 					<div class="row-container">
-						<p class="details">Include symbols:</p>
+						<p class="details">Include symbols?</p>
 						<input
 							class="checkbox"
 							type="checkbox"
@@ -54,14 +74,15 @@
 				<p
 					class="password-option"
 					id="password-one"
-					onclick="copyTextToClipboard()"
+					onclick="copyTextToClipboard('password-one')"
 				></p>
 				<p
 					class="password-option"
 					id="password-two"
-					onclick="copyTextToClipboard()"
+					onclick="copyTextToClipboard('password-two')"
 				></p>
 			</div>
+			<div id="copy-tooltip" style="display: none">Copied!</div>
 		</div>
 		<script src="index.js"></script>
 	</body>
