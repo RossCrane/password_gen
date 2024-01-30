@@ -173,6 +173,11 @@ function generatePassword(length) {
 	return password;
 }
 
+function copyTextToClipboard(el) {
+	const text = document.getElementById(el).innerText;
+	navigator.clipboard.writeText(text);
+}
+
 passwordOneEl.addEventListener('click', () => {
 	navigator.clipboard.writeText(passwordOneEl.textContent);
 });
